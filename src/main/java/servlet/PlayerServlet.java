@@ -18,10 +18,6 @@ public class PlayerServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html");
-        PlayerDAO playerDAO = new PlayerDAO();
-        ArrayList<Player> playerList = new ArrayList<>();
-        playerList = (ArrayList<Player>) playerDAO.read();
-        request.setAttribute("playerList", playerList);
 
         request.getRequestDispatcher("player.jsp").forward(request, response);
     }
@@ -34,5 +30,6 @@ public class PlayerServlet extends HttpServlet {
         PlayerDAO playerDAO = new PlayerDAO();
         Player player = new Player(email, nickname);
         playerDAO.create(player);
+        resp.sendRedirect(req.getContextPath() + "/player-servlet");
     }
 }

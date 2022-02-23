@@ -11,20 +11,18 @@
 </head>
 <body>
 <c:import url="navbar.jsp"/>
-<form class="container w-50" action="${pageContext.request.contextPath}/game-servlet" method="post">
+<form class="container w-50" action="${pageContext.request.contextPath}/contest-servlet" method="post">
     <div class="mb-3">
-        <label for="titleInput" class="form-label">Title</label>
-        <input type="text" class="form-control" id="titleInput" name="title">
+        <label class="mr-sm-2" for="inlineFormCustomSelect">Game</label>
+        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="game">
+            <c:forEach items="${ gameList }" var="element" varStatus="count">
+                <option value="${element.getId()}">${element.getTitle()}</option>
+            </c:forEach>
+        </select>
     </div>
-    <div class="row">
     <div class="col mb-3">
-        <label for="minplayersinput" class="form-label">Min players</label>
-        <input type="number" class="form-control" id="minplayersinput" name="minplayers">
-    </div>
-    <div class="col mb-3">
-        <label for="maxplayersinput" class="form-label">Max players</label>
-        <input type="number" class="form-control" id="maxplayersinput" name="maxplayers">
-    </div>
+        <label for="dateInput" class="form-label">Start Date</label>
+        <input type="date" class="form-control" id="dateInput" name="date">
     </div>
     <button type="submit" class="btn btn-primary">Create</button>
 </form>

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
+    private int idFromContest;
     private int id;
     private String email = "";
     private String nickname = "";
@@ -23,6 +24,14 @@ public class Player {
         this.nickname = nickname;
     }
 
+    public Player(int idFromContest, Player player)
+    {
+        this.idFromContest = idFromContest;
+        this.id = player.id;
+        this.email = player.email;
+        this.nickname = player.nickname;
+    }
+
     public int getId() {
         return id;
     }
@@ -33,5 +42,9 @@ public class Player {
 
     public String getNickname() {
         return nickname;
+    }
+
+    public int getIdFromContest() {
+        return idFromContest;
     }
 }

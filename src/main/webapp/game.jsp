@@ -11,25 +11,22 @@
 </head>
 <body>
 <c:import url="navbar.jsp"/>
-<table id="tableGame" class="table table-striped table-bordered" cellspacing="0" width="100%">
-    <thead>
-    <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Titre</th>
-        <th scope="col">Min_Players</th>
-        <th scope="col">Max_Players</th>
-    </tr>
-    </thead>
-    <tbody>
-    <c:forEach items="${gameList}" var="element">
-        <tr>
-            <th scope="row" class="align-middle">${element.getId()}</th>
-            <td class="align-middle">${element.getTitle()}</td>
-            <td class="align-middle">${element.getMin_players()}</td>
-            <td class="align-middle">${element.getMax_players()}</td>
-        </tr>
-    </c:forEach>
-    </tbody>
-</table>
+<form class="container w-50" action="${pageContext.request.contextPath}/game-servlet" method="post">
+    <div class="mb-3">
+        <label for="titleInput" class="form-label">Title</label>
+        <input type="text" class="form-control" id="titleInput" name="title">
+    </div>
+    <div class="row">
+    <div class="col mb-3">
+        <label for="minplayersinput" class="form-label">Min players</label>
+        <input type="number" class="form-control" id="minplayersinput" name="minplayers">
+    </div>
+    <div class="col mb-3">
+        <label for="maxplayersinput" class="form-label">Max players</label>
+        <input type="number" class="form-control" id="maxplayersinput" name="maxplayers">
+    </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
 </body>
 </html>

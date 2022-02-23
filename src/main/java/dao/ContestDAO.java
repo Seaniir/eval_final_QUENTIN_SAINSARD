@@ -2,6 +2,7 @@ package dao;
 
 import model.Contest;
 import model.Contest;
+import model.Player;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,11 +16,10 @@ public class ContestDAO implements  IDAO<Contest> {
     public boolean create(Contest contest) {
         boolean msg = false;
         try {
-            PreparedStatement req = connect.prepareStatement("INSERT INTO contest (game_id, start_date, winner_id)"
-                    + "VALUES (?,?,?)");
+            PreparedStatement req = connect.prepareStatement("INSERT INTO contest (game_id, start_date)"
+                    + "VALUES (?,?)");
             req.setInt(1, contest.getGame_id());
             req.setDate(2, contest.getStart_date());
-            req.setInt(3, contest.getWinner_id());
 
             req.executeUpdate();
 
@@ -28,6 +28,7 @@ public class ContestDAO implements  IDAO<Contest> {
 
         } catch (Exception e) {
             System.out.println("Insertion KO");
+            System.out.println(e);
         }
         return msg;
     }
@@ -57,7 +58,7 @@ public class ContestDAO implements  IDAO<Contest> {
         List<Contest> liste = new ArrayList<>();
         Contest contest = new Contest();
         try {
-            PreparedStatement req = connect.prepareStatement("SELECT * FROM contest");
+            PreparedStatement req = connect.prepareStatement("SELECT * FROM contest ORDER BY start_date DESC");
 
             rs = req.executeQuery();
 
@@ -109,5 +110,64 @@ public class ContestDAO implements  IDAO<Contest> {
             throwables.printStackTrace();
         }
         return contest;
+    }
+
+    public ArrayList<Player> findContestors(int id) {
+        ArrayList<Player> contestors = new ArrayList<>();
+        PlayerDAO playerDAO = new PlayerDAO();
+        try {
+            PreparedStatement req = connect.prepareStatement("SELECT id, player_id FROM player_contest WHERE contest_id = ?");
+            req.setInt(1, id);
+
+            rs = req.executeQuery();
+
+            while (rs.next()) {
+                Player player = playerDAO.findById(rs.getInt("player_id"));
+                Player player1 = new Player(rs.getInt("id"), player);
+                contestors.add(player1);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return contestors;
+    }
+
+    public void addContestor(int player_id, int contest_id) {
+        try {
+            PreparedStatement req = connect.prepareStatement("INSERT INTO player_contest (player_id, contest_id)"
+                    + "VALUES (?,?)");
+            req.setInt(1, player_id);
+            req.setInt(2, contest_id);
+            //System.out.println(req);
+            req.executeUpdate();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public void updateWinner(int winner_id, int contest_id) {
+        try {
+            PreparedStatement req = connect.prepareStatement("UPDATE contest SET winner_id=? WHERE id=?");
+            req.setInt(1, winner_id);
+            req.setInt(2, contest_id);
+            //System.out.println(req);
+            req.executeUpdate();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteContestor(int id) {
+        try {
+            PreparedStatement req = connect.prepareStatement("DELETE FROM player_contest WHERE id=?");
+            req.setInt(1, id);
+            //System.out.println(req);
+            req.executeUpdate();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }
